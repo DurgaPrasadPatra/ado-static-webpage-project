@@ -1,0 +1,79 @@
+
+# ============================================================
+# 1. PIPELINE TRIGGER
+# ============================================================
+
+# Run this pipeline automatically when changes are pushed
+# to the main branch of the repository containing this YAML.
+trigger:
+  - main
+
+
+# ============================================================
+# 2. AGENT POOL
+# ============================================================
+
+# Tell Azure DevOps which agent pool should execute the pipeline.
+# "nodepool" must match the name of an existing agent pool.
+# The selected agent runs checkout, scripts, builds, and other jobs.
+pool: nodepool
+
+
+# ============================================================
+# 3. VARIABLE GROUP
+# ============================================================
+
+# Import shared variables from the Library in Azure DevOps.
+# The group must already exist and its name must match exactly.
+# Example variables might be connection and appname.
+variables:
+  - group: App-service-variabliegroup
+
+
+# ============================================================
+# 4. EXTERNAL REPOSITORY RESOURCES
+# ============================================================
+
+resources:
+  repositories:
+
+    # "templates" is a local alias for the external repository.
+    # We will use this alias later when referencing the template.
+    - repository: templates
+
+      # Tell Azure DevOps that the external repository is hosted
+      # on GitHub rather than Azure Repos.
+      type: github
+
+      # Specify the GitHub owner/repository name.
+      # Expected format: owner/repository.
+      name: labdemo2233/pipeline-template
+
+      # Reference the GitHub service connection configured
+      # in Azure DevOps to authenticate to the repository.
+      # This endpoint must exist and have the required permissions.
+      endpoint: github.com_labdemo2233
+
+
+# ============================================================
+# 5. PIPELINE STEPS
+# ============================================================
+
+steps:
+
+  # Import the YAML template from the external repository.
+  # pipeline-template.yaml is the file path inside that repo.
+  # @templates refers to the alias declared under resources.
+  - template: pipeline-template.yaml@templates
+
+    # Supply values to parameters declared inside the template.
+    parameters:
+
+      # Read the Azure service connection value from the
+      # Azure DevOps variable named "connection".
+      # The template must declare this parameter name.
+      azureserviceconnection: $(connection)
+
+      # Read the application name from the variable named
+      # "appname" and pass it to the template.
+      applicationname: $(appname)
