@@ -47,12 +47,12 @@ resources:
 
       # Specify the GitHub owner/repository name.
       # Expected format: owner/repository.
-      name: labdemo2233/pipeline-template
+      name: DurgaPrasadPatra/azure-pipeline-ci-template-repo
 
       # Reference the GitHub service connection configured
       # in Azure DevOps to authenticate to the repository.
       # This endpoint must exist and have the required permissions.
-      endpoint: github.com_labdemo2233
+      endpoint: github.com_DurgaPrasadPatra
 
 
 # ============================================================
@@ -64,7 +64,7 @@ steps:
   # Import the YAML template from the external repository.
   # pipeline-template.yaml is the file path inside that repo.
   # @templates refers to the alias declared under resources.
-  - template: pipeline-template.yaml@templates
+  - template: static-website-build-pipeline-template.yaml@templates
 
     # Supply values to parameters declared inside the template.
     parameters:
